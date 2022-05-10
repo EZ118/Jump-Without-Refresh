@@ -39,7 +39,9 @@ function GetPageUrl(subUrl){
 }
 
 function ShowPage(url) {
-	var xhttp = new XMLHttpRequest();
+	if (window.XMLHttpRequest) {xhttp = new XMLHttpRequest();}
+	else {xhttp = new ActiveXObject("Microsoft.XMLHTTP");}
+	
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			Ele.innerHTML = this.responseText;
@@ -49,16 +51,17 @@ function ShowPage(url) {
 	xhttp.send(); 
 }
 
-function GetData(url=window.location.href){
+function GetData(url){
 	url += "#default";
 	url = url.split("#")[1];
+	url = GetPageUrl(url);
 	return url;
 }
 
 document.onmousedown = function(){
 	setTimeout(function(){
 		if(LastURL != window.location.href) {
-			rurl = GetPageUrl(GetData());
+			rurl = GetData(window.location.href);
 			ShowPage(rurl);
 			//alert(GetPageUrl(GetData()));
 			LastURL = window.location.href;
