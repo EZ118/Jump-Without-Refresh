@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8">
@@ -35,6 +36,10 @@
 		<script>
 			SetPage(document.getElementById("mainPage"));
 			SetUrlList(ULJson);
+			SetLoaderStyle({
+				"static":"position:fixed;top:0;left:0;background:red;height:3px;z-index:10;",//此处表示静态样式
+				"active":"width"//此处表示加载时动态的样式，可以填width、height等
+			});
 			ShowPage(GetData(window.location.href));
 		</script>
 	</body>
