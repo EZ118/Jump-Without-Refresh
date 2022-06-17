@@ -17,7 +17,7 @@ var UrlList = ULJson = [
 		"realUrl":"./subPage2.htm"
 	},
 ];
-var Ele;
+var Ele;			//装载子页面的元素
 var LoaderEle = document.createElement("div");
 var LoaderStyle = {
 	"static":"position:fixed;top:0;left:0;background:#0066FF;height:3px;z-index:10;",
@@ -28,10 +28,10 @@ window.onload = function(){
 	document.body.appendChild(LoaderEle);
 	LoaderEle.setAttribute("style", "");
 	
-	let GuoDuStyle = "@keyframes anim{\
-		0%{" + LoaderStyle["static"] + ";" + LoaderStyle["active"] + ":83%;}\
-		40%{" + LoaderStyle["static"] + ";" + LoaderStyle["active"] + ":80%;}\
-		100%{" + LoaderStyle["static"] + ";" + LoaderStyle["active"] + ":100%;}}";
+	let GuoDuStyle = "@keyframes jwr_anim{\
+		0%{" + LoaderStyle["static"] + ";" + LoaderStyle["active"] + ":15%;opacity:1;}\
+		80%{" + LoaderStyle["static"] + ";" + LoaderStyle["active"] + ":80%;opacity:0.8;}\
+		100%{" + LoaderStyle["static"] + ";" + LoaderStyle["active"] + ":100%;opacity:0.1;}}";
 	let GuoDuStyleEle = document.createElement("style");
 	document.head.appendChild(GuoDuStyleEle);
 	GuoDuStyleEle.innerHTML=GuoDuStyle;
@@ -75,20 +75,17 @@ function GetPageUrl(subUrl){
 function ShowPage(url) {
 	if (window.XMLHttpRequest) {xhttp = new XMLHttpRequest();}
 	else {xhttp = new ActiveXObject("Microsoft.XMLHTTP");}
-	xhttp.onprogress = function(event){
-        if(event.lengthComputable){
-            var loaded = Math.round(event.loaded / event.total * 100) + "%";
-			LoaderEle.setAttribute("style", LoaderStyle["static"] + ";" + LoaderStyle["active"] + ":" + loaded + ";");
-        }
-    };
+	
+	LoaderEle.setAttribute("style", LoaderStyle["static"] + ";" + LoaderStyle["active"] + ":15%;");
+	
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			Ele.innerHTML = this.responseText;
 			
-			LoaderEle.setAttribute("style", LoaderStyle["static"] + ";animation:anim .3s linear;");
+			LoaderEle.setAttribute("style", LoaderStyle["static"] + ";animation:jwr_anim .3s linear; animation-fill-mode:forwards;");
 			setTimeout(function() {
 				LoaderEle.setAttribute("style", "display:none;");
-			}, 600);
+			}, 400);
 		}
 	};
 	xhttp.open("GET", url, true);
@@ -102,12 +99,23 @@ function GetData(url){
 	return url;
 }
 
-document.onmousedown = function(){
-	setTimeout(function(){
+try {
+	window.onhashchange = function () {
 		if(LastURL != window.location.href) {
 			rurl = GetData(window.location.href);
 			ShowPage(rurl);
 			LastURL = window.location.href;
 		}
-	}, 300);
+	};
+} catch(err) {
+	alert("Your Browser Doesn't Support 'onhashchange' Case");
+	document.onmousedown = function(){
+		setTimeout(function(){
+			if(LastURL != window.location.href) {
+				rurl = GetData(window.location.href);
+				ShowPage(rurl);
+				LastURL = window.location.href;
+			}
+		}, 300);
+	}
 }
