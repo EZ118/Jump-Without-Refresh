@@ -1,7 +1,7 @@
 # DevDoc   
    
    
-**你的HTML页面必须包含以下代码**   
+**你的HTML页面需包含以下代码**   
 ```html
 <div id="mainPage"></div>
 <!--
@@ -33,8 +33,12 @@ ULJson = [
 		"realUrl":"./mainPage.htm"
 	},
 	{
+		"subUrl":"error",                   //当页面的假URL路径错误，用error表示
+		"realUrl":"./error.htm"
+	},
+	{
 		"subUrl":"/home/",					//真实页面路径对应的假URL路径
-		"realUrl":"./mainPage.htm"				//假URL路径所表示页面的真实路径
+		"realUrl":"./mainPage.htm"			//假URL路径所表示页面的真实路径
 	},
 	{
 		"subUrl":"/test1/",
