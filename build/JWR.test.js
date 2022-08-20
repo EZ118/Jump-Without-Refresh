@@ -1,27 +1,31 @@
 var LastURL = "";
-var UrlList = ULJson = [
+var UrlList = [
 	{
 		"subUrl":"default",
-		"realUrl":"./mainPage.htm"
+		"realUrl":"./pages/mainPage.htm"
 	},
 	{
 		"subUrl":"error",
-		"realUrl":"./error.htm"
+		"realUrl":"./pages/error.htm"
 	},
 	{
 		"subUrl":"/home/",
-		"realUrl":"./mainPage.htm"
+		"realUrl":"./pages/mainPage.htm"
 	},
 	{
 		"subUrl":"/test1/",
-		"realUrl":"./subPage1.htm"
+		"realUrl":"./pages/subPage1.htm"
+	},
+	{
+		"subUrl":"/test1/ViewDevDoc/",
+		"realUrl":"./pages/subPage3.htm"
 	},
 	{
 		"subUrl":"/test2/",
-		"realUrl":"./subPage2.htm"
-	},
+		"realUrl":"./pages/subPage2.htm"
+	}
 ];
-var Ele;			//装载子页面的元素
+var SubPageEle;			//装载子页面的元素
 var LoaderEle = document.createElement("div");
 var LoaderStyle = {
 	"static":"position:fixed;top:0;left:0;background:#0066FF;height:3px;z-index:10;",
@@ -49,7 +53,7 @@ function SetUrlList(json){
 
 function SetPage(ele){
 	//设置装载子页面的元素
-	Ele = ele;
+	SubPageEle = ele;
 }
 
 function SetLoaderStyle(ls){
@@ -61,7 +65,7 @@ function SetLoaderStyle(ls){
 	}
 }
 
-function GetPageUrl(subUrl, errorCode){
+function GetTrueUrl(subUrl, errorCode){
 	//从Json中通过假Url获取真实Url
 	if(errorCode == null) {errorCode = 0;}
 	
@@ -70,15 +74,22 @@ function GetPageUrl(subUrl, errorCode){
 		let cnt = 0;
 		let slen = subUrl.length;
 		
-		if(subUrl[slen - 1] == "") {slen -= 1;}
+		if(subUrl[slen - 1] == "") {
+			slen -= 1;
+		}
 		
 		for(let j = 0; j < subUrl.length; j ++) {
-			if(UrlList[i]["subUrl"].split("/")[j] == subUrl[j]) {cnt ++;}
+			if(UrlList[i]["subUrl"].split("/")[j] == subUrl[j]) {
+				cnt ++;
+			}
 		}
-		if (cnt == subUrl.length) {return UrlList[i]["realUrl"];}
+		
+		if (cnt == subUrl.length) {
+			return UrlList[i]["realUrl"];
+		}
 	}
 	if(errorCode == 0) {
-		return GetPageUrl("error", 1);
+		return GetTrueUrl("error", 1);
 	} else { return "error"; }
 }
 
@@ -90,7 +101,7 @@ function ShowPage(url) {
 	
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
-			Ele.innerHTML = this.responseText;
+			SubPageEle.innerHTML = this.responseText;
 			
 			LoaderEle.setAttribute("style", LoaderStyle["static"] + ";animation:jwr_anim " + LoaderDelayTime + "s linear; animation-fill-mode:forwards;");
 			setTimeout(function() {
@@ -102,17 +113,17 @@ function ShowPage(url) {
 	xhttp.send(); 
 }
 
-function GetData(url){
+function GetFakeUrl(url){
 	url += "#default";
 	url = url.split("#")[1];
-	url = GetPageUrl(url, 0);
+	url = GetTrueUrl(url, 0);
 	return url;
 }
 
 try {
 	window.onhashchange = function () {
 		if(LastURL != window.location.href) {
-			rurl = GetData(window.location.href);
+			rurl = GetFakeUrl(window.location.href);
 			ShowPage(rurl);
 			LastURL = window.location.href;
 		}
@@ -122,7 +133,7 @@ try {
 	document.onmousedown = function(){
 		setTimeout(function(){
 			if(LastURL != window.location.href) {
-				rurl = GetData(window.location.href);
+				rurl = GetFakeUrl(window.location.href);
 				ShowPage(rurl);
 				LastURL = window.location.href;
 			}

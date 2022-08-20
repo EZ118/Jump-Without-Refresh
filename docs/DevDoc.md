@@ -18,7 +18,7 @@
 		"static":"position:fixed;top:0;left:0;background:red;height:3px;z-index:10;",//此处表示静态样式
 		"active":"width"								//此处表示加载时动态的样式，可以填width、height等
 	});
-	ShowPage(GetData(window.location.href));			//在页面加载完成后载入子页面，此处在最新的版本更新中略有改动，此举是为了兼容IE
+	ShowPage(GetFakeUrl(window.location.href));			//在页面加载完成后载入子页面，此处在最新的版本更新中略有改动，此举是为了兼容IE
 </script> 
 ```   
    
