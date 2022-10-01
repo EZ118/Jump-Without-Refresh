@@ -2,7 +2,7 @@ class JWR {
 	constructor() {		
 		this.LastURL = "";			//最后一次加载后的页面链接
 		this.UrlList = [{"subUrl":"error","realUrl":"./JWR.js"}];	//默认错误页
-		this.SubPageEle;			//装载子页面的元素
+		this.SubPageEle = null;		//装载子页面的元素
 		this.LoaderEle = document.createElement("div");
 		this.LoaderStyle = {
 			"static":"position:fixed;top:0;left:0;background:#0066FF;height:3px;z-index:10;",
@@ -24,8 +24,8 @@ class JWR {
 	
 	SetLoaderStyle(ls){
 		//设置加载条样式
-		if(LoaderStyle["static"]!=undefined && LoaderStyle["active"]!=undefined){
-			LoaderStyle = ls;
+		if(ls["static"]!=undefined && ls["active"]!=undefined){
+			this.LoaderStyle = ls;
 		} else {
 			alert("Failed To Config!\n(JWR.js, SetLoaderStyle)");
 		}
